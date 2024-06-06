@@ -32,7 +32,6 @@ func RunParallelDownload(cmd *cobra.Command, args []string) error {
 	urlLink := args[0]
 	task, err := pdown.NewDownloadingTask(urlLink, numWorkers)
 	if err != nil {
-
 		return err
 	}
 	return task.Start()

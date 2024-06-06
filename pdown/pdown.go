@@ -79,7 +79,7 @@ func NewDownloadingTask(fileURL string, numWorker int) (*DownloadingTask, error)
 	}
 
 	// create a tmp file to store the downloaded content
-	file, err := os.CreateTemp(".", "multi-downloader-*")
+	file, err := os.CreateTemp(".", ".multi-downloader-*")
 	if err != nil {
 		return nil, err
 	}

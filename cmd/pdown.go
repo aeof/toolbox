@@ -2,9 +2,9 @@ package cmd
 
 import (
 	"errors"
+	"github.com/aeof/toolbox/pdown"
 	"github.com/spf13/cobra"
 	"runtime"
-	"toolbox/pdown"
 )
 
 var (

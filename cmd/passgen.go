@@ -3,9 +3,9 @@ package cmd
 import (
 	"errors"
 	"fmt"
+	"github.com/aeof/toolbox/passgen"
 	"github.com/spf13/cobra"
 	"strconv"
-	"toolbox/passgen"
 )
 
 const (
@@ -39,7 +39,6 @@ func init() {
 
 func RunPassgen(cmd *cobra.Command, args []string) error {
 	lenPassword := defaultPasswordLength
-	fmt.Println(args)
 	if len(args) > 0 {
 		lenPassword, err := strconv.Atoi(args[0])
 		if err != nil || lenPassword <= 0 {
@@ -47,23 +46,22 @@ func RunPassgen(cmd *cobra.Command, args []string) error {
 		}
 	}
 
+	flagLists := []struct {
+		allowed     bool
+		passgenFlag int
+	}{
+		{allowDigit, passgen.AllowDigit},
+		{allowLower, passgen.AllowLower},
+		{allowUpper, passgen.AllowUpper},
+		{allowSymbol, passgen.AllowSymbol},
+	}
+
 	var flags int
-	if allowDigit {
-		flags |= passgen.AllowDigit
-	}
-	if allowLower {
-		flags |= passgen.AllowLower
-	}
-	if allowUpper {
-		flags |= passgen.AllowUpper
-	}
-	if allowSymbol {
-		flags |= passgen.AllowSymbol
+	for _, flagItem := range flagLists {
+		if flagItem.allowed {
+			flags |= flagItem.passgenFlag
+		}
 	}
 	fmt.Println(passgen.GeneratePassword(lenPassword, flags))
 	return nil
-}
-
-func init() {
-	rootCmd.AddCommand()
 }

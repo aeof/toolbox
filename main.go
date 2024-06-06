@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"toolbox/cmd"
+	"github.com/aeof/toolbox/cmd"
 )
 
 func main() {

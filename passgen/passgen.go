@@ -11,13 +11,7 @@ import (
 2. randomly select a character in the character set
 */
 
-const (
-	DIGIT = iota
-	LOWER
-	UPPER
-	SYMBOL
-)
-
+// flags to specify the selected charsets for password generation
 const (
 	AllowDigit = 1 << iota
 	AllowLower
@@ -60,11 +54,13 @@ func generateSymbol() byte {
 	return symbols[random.Intn(len(symbols))]
 }
 
-func GeneratePassword(length int, charsetFlag int) string {
+// GeneratePassword generates password with the specified charsetFlags
+// Example: to generate passwords with lowercase letters and digit, just pass `AllowLower|AllowDigit`
+func GeneratePassword(length int, charsetFlags int) string {
 	buf := make([]byte, length)
 	for i := 0; i < length; i++ {
 		indexCharsetGenerator := -1
-		for indexCharsetGenerator == -1 || charsetFlag&(1<<indexCharsetGenerator) == 0 {
+		for indexCharsetGenerator == -1 || charsetFlags&(1<<indexCharsetGenerator) == 0 {
 			indexCharsetGenerator = random.Intn(len(charsetGenerators))
 		}
 		buf[i] = charsetGenerators[indexCharsetGenerator]()

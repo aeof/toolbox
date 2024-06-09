@@ -17,10 +17,13 @@ var (
 
 	// number of the concurrent downloading workers. If not specified, the count is set to the number of CPU cores
 	numWorkers int
+	// target file name to save to the disk
+	fileName string
 )
 
 func init() {
 	downloaderCmd.Flags().IntVar(&numWorkers, "worker", runtime.NumCPU(), "number of concurrent connections")
+	downloaderCmd.Flags().StringVar(&fileName, "filename", "", "filename to save to the disk")
 	rootCmd.AddCommand(downloaderCmd)
 }
 
@@ -30,7 +33,7 @@ func RunParallelDownload(cmd *cobra.Command, args []string) error {
 	}
 
 	urlLink := args[0]
-	task, err := pdown.NewDownloadingTask(urlLink, numWorkers)
+	task, err := pdown.NewDownloadingTask(urlLink, numWorkers, pdown.WithName(fileName))
 	if err != nil {
 		return err
 	}

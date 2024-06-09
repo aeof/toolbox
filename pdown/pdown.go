@@ -64,7 +64,19 @@ type DownloadingTask struct {
 	CompleteStatus []bool
 }
 
-func NewDownloadingTask(fileURL string, numWorker int) (*DownloadingTask, error) {
+// NewDownloadingTaskOption Options to create specified task
+// As Go doesn't allow overriding, we can use options pattern to achieve similar effects
+type NewDownloadingTaskOption func(task *DownloadingTask)
+
+func WithName(name string) NewDownloadingTaskOption {
+	return func(task *DownloadingTask) {
+		if name != "" {
+			task.FileName = name
+		}
+	}
+}
+
+func NewDownloadingTask(fileURL string, numWorker int, options ...NewDownloadingTaskOption) (*DownloadingTask, error) {
 	// fetch the content length of the file
 	resp, err := http.Head(fileURL)
 	if err != nil {
@@ -86,14 +98,18 @@ func NewDownloadingTask(fileURL string, numWorker int) (*DownloadingTask, error)
 	defer file.Close()
 
 	// create a downloading task and start downloading
-	return &DownloadingTask{
+	task := &DownloadingTask{
 		Url:            fileURL,
 		Length:         contentLength,
 		NumWorker:      numWorker,
 		CompleteStatus: make([]bool, numWorker),
 		TempFileName:   file.Name(),
 		FileName:       parseFileName(fileURL),
-	}, nil
+	}
+	for _, option := range options {
+		option(task)
+	}
+	return task, nil
 }
 
 // IsComplete checks if all the workers have finished downloading

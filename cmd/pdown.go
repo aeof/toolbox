@@ -22,8 +22,8 @@ var (
 )
 
 func init() {
-	downloaderCmd.Flags().IntVar(&numWorkers, "worker", runtime.NumCPU(), "number of concurrent connections")
-	downloaderCmd.Flags().StringVar(&fileName, "filename", "", "filename to save to the disk")
+	downloaderCmd.Flags().IntVar(&numWorkers, "thread", runtime.NumCPU(), "number of concurrent connections")
+	downloaderCmd.Flags().StringVar(&fileName, "name", "", "filename to save to the disk")
 	rootCmd.AddCommand(downloaderCmd)
 }
 

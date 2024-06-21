@@ -3,6 +3,7 @@ package pdown
 import (
 	"errors"
 	"fmt"
+	"github.com/aeof/toolbox/utils"
 	"io"
 	"net/http"
 	"os"
@@ -72,11 +73,15 @@ func WithName(name string) NewDownloadingTaskOption {
 	return func(task *DownloadingTask) {
 		if name != "" {
 			task.FileName = name
+			utils.LogVerbose("Set file name to:", name)
 		}
 	}
 }
 
 func NewDownloadingTask(fileURL string, numWorker int, options ...NewDownloadingTaskOption) (*DownloadingTask, error) {
+	utils.LogVerbose("File URL:", fileURL)
+	utils.LogVerbose("Number of workers:", numWorker)
+
 	// fetch the content length of the file
 	resp, err := http.Head(fileURL)
 	if err != nil {
@@ -88,6 +93,9 @@ func NewDownloadingTask(fileURL string, numWorker int, options ...NewDownloading
 	if err != nil {
 		numWorker = 1
 		contentLength = -1
+		utils.LogVerbose("Unknown task file size")
+	} else {
+		utils.LogVerbose("Task file size:", contentLength)
 	}
 
 	// create a tmp file to store the downloaded content
@@ -96,6 +104,7 @@ func NewDownloadingTask(fileURL string, numWorker int, options ...NewDownloading
 		return nil, err
 	}
 	defer file.Close()
+	utils.LogVerbose("Temp file created:", file.Name())
 
 	// create a downloading task and start downloading
 	task := &DownloadingTask{

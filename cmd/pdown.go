@@ -12,7 +12,7 @@ var (
 		Use:   "pdown",
 		Short: "Pdown is a parallel downloader",
 		Long:  "Pdown is a parallel downloader that use concurrent connections to download files",
-		RunE:  RunParallelDownload,
+		RunE:  RunParallelDownloader,
 	}
 
 	// number of the concurrent downloading workers. If not specified, the count is set to the number of CPU cores
@@ -27,7 +27,7 @@ func init() {
 	rootCmd.AddCommand(downloaderCmd)
 }
 
-func RunParallelDownload(cmd *cobra.Command, args []string) error {
+func RunParallelDownloader(cmd *cobra.Command, args []string) error {
 	if len(args) == 0 {
 		return errors.New("missing downloading link")
 	}

@@ -1,6 +1,7 @@
 package passgen
 
 import (
+	"github.com/aeof/toolbox/utils"
 	"math/rand"
 	"time"
 )
@@ -57,6 +58,8 @@ func generateSymbol() byte {
 // GeneratePassword generates password with the specified charsetFlags
 // Example: to generate passwords with lowercase letters and digit, just pass `AllowLower|AllowDigit`
 func GeneratePassword(length int, charsetFlags int) string {
+	utils.LogVerbose("Generate password of length", length)
+
 	buf := make([]byte, length)
 	for i := 0; i < length; i++ {
 		indexCharsetGenerator := -1

@@ -6,6 +6,6 @@ var Verbose bool
 
 func LogVerbose(msg ...any) {
 	if Verbose {
-		fmt.Println(msg)
+		fmt.Println(msg...)
 	}
 }

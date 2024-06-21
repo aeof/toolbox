@@ -44,6 +44,13 @@ var (
 	ErrDownloadingNotCompleted = errors.New("downloading not completed")
 )
 
+func init() {
+	// use system proxy settings
+	http.DefaultClient.Transport = &http.Transport{
+		Proxy: http.ProxyFromEnvironment,
+	}
+}
+
 // DownloadingTask represents an HTTP file downloading task
 type DownloadingTask struct {
 	// the URL of the file to pdown
